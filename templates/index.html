@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plant Disease Detection</title>
+    
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #2c3e50 url('your-background-image.jpg') no-repeat center center fixed; /* Replace 'your-background-image.jpg' with the path to your image */
+            background-size: cover;
+            color: #fff; /* Text color */
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #4CAF50; /* Green color for the header */
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            margin: 0;
+            color: #ffffff; /* Header text color */
+        }
+
+        h2 {
+            color: #fff; /* Text color */
+        }
+
+        form {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        #imageContainer {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        #uploadedImage {
+            max-width: 30%;
+            max-height: 30%;
+            margin-top: 20px;
+        }
+
+        #predictionContainer {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        button {
+            background-color: #4CAF50; /* Green color */
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049; /* Darker green color on hover */
+        }
+    </style>
+
+</head>
+<body>
+    <header>
+        <h1>Plant Disease Detection</h1>
+    </header>
+
+    <form id="uploadForm" enctype="multipart/form-data">
+        <label for="image">Select an image:</label>
+        <input type="file" id="imageInput" accept="image/*" required onchange="displayImage()">
+        <br>
+        <br>
+        <button type="button" onclick="uploadImage()">Predict</button>
+    </form>
+
+    <div id="imageContainer" style="display: none;">
+        <h2>Uploaded Image</h2>
+        <img id="uploadedImage" alt="Uploaded Image">
+    </div>
+
+    <div id="predictionContainer"></div>
+
+    <script>
+        // Your existing JavaScript code
+        function displayImage() {
+            var input = document.getElementById('imageInput');
+            var imageContainer = document.getElementById('imageContainer');
+            var uploadedImage = document.getElementById('uploadedImage');
+
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    uploadedImage.src = e.target.result;
+                    imageContainer.style.display = 'block';
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function uploadImage() {
+            var input = document.getElementById('imageInput');
+            var imageContainer = document.getElementById('imageContainer');
+            var predictionContainer = document.getElementById('predictionContainer');
+            var formData = new FormData();
+            formData.append('image', input.files[0]);
+
+            fetch('/predict', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Commented the line below to retain the image after prediction
+                // uploadedImage.src = data.image_path;
+                predictionContainer.innerHTML = '<h2>Prediction: ' + data.prediction + '</h2>';
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+</body>
+</html>
