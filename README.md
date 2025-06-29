@@ -1,4 +1,4 @@
-# Leaf Disease Classification Using Convolutional Neural Networks (CNNs)
+# Leveraging Convolutional Neural Network for Classification of Leaf Disease
 
 ## Overview
 This project implements a deep learning approach to detect and classify plant leaf diseases into three categories: **Healthy**, **Powdery**, and **Rust**. Leveraging a custom CNN architecture with image preprocessing and data augmentation, the model aims to provide an accessible, accurate, and scalable solution for early plant disease detection to improve crop management and food security.
